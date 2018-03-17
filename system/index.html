@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Essential Ingredients Specialist Provider Inc. GSM Tester</title>
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/stylesheet.css">
+    <script src="assets/js/require.js"></script>
+    <script src="assets/js/script.js"></script>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="labels">
+            <div class="logo">
+                <img src="assets/img/logo-white.png">
+            </div>
+            <div class="title">Essential Ingredients Specialist Provider Inc. SMS Sender</div>
+        </div>
+        <div class="buttons">
+            <div class="app-minimize-button">
+                <span class="fa fa-window-minimize"></span>
+            </div>
+            <div class="app-close-button">
+                <span class="fa fa-close"></span>
+            </div>
+        </div>
+    </div>
+    <div id="main-container" class="workspace">
+        <div id="loader-page" class="page">
+            <div class="flexed">
+                <div class="text-center">
+                    <span class="fa fa-spinner fa-pulse fa-3x fa-fw"></span>
+                    <div style="font-size: 1.25em; margin-top: 10px;">Please Wait...</div>
+                </div>
+            </div>
+        </div>
+        <div id="main-page" class="page">
+            <div class="row">
+                <div class="col-sm-5">
+                    <fieldset class="input-fieldset">
+                        <div class="form-group">
+                            <label for="url-field">URL:</label>
+                            <select id="url-field" class="form-control">
+                                <option value="" selected disabled>Select an option...</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-sm-5">
+                    <fieldset class="input-fieldset">
+                        <div class="form-group">
+                            <label for="com-port-field">COM Port:</label>
+                            <select id="com-port-field" class="form-control">
+                                <option value="" selected disabled>Select an option...</option>
+                                <option value="">Test</option>
+                                <option value="Test">Test</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group text-right">
+                        <button type="button" id="run-button" class="btn btn-primary btn-lg" disabled>Start</button>
+                    </div>
+                </div>
+            </div>
+            <div id="job-logs">
+                <div class="listing"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

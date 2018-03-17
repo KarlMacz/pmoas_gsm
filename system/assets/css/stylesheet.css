@@ -1,0 +1,170 @@
+/*
+* Customized Bootstrap
+*/
+.navbar .navbar-brand .logo {
+    position: relative;
+    top: 50%;
+    margin-top: -20px;
+    height: 40px;
+}
+
+/*
+* Custom Designs
+*/
+::-webkit-scrollbar {
+    background-color: #eee;
+    height: 7px;
+    width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #2c3e50;
+    border: 1px solid #eee;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #eee;
+}
+
+.titlebar {
+    /*background: linear-gradient(#e0dee0, #bfbdbf);*/
+    background-color: #2c3e50;
+    font-size: 0;
+    height: 40px;
+    width: 100%;
+    -webkit-app-region: drag;
+}
+
+.titlebar > .buttons,
+.titlebar > .labels {
+    display: inline-block;
+    font-size: 15px;
+    vertical-align: top;
+    line-height: 16px;
+    height: 40px;
+    padding: 12px;
+}
+
+.titlebar > .labels {
+    color: white;
+    width: calc(100% - 70px);
+}
+
+.titlebar > .labels > .logo {
+    float: left;
+    margin-right: 12px;
+    height: 16px;
+    width: 16px;
+}
+
+.titlebar > .labels > .logo > img {
+    vertical-align: top;
+    height: 100%;
+    width: 100%;
+}
+
+.titlebar > .buttons {
+    text-align: right;
+    width: 70px;
+}
+
+.app-minimize-button,
+.app-close-button {
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    margin-left: 2px;
+    line-height: 16px;
+    height: 16px;
+    width: 16px;
+    -webkit-app-region: no-drag;
+}
+
+.app-minimize-button {
+    background-color: #ffc12e;
+    color: #ffc12e;
+    font-size: 0.5em;
+}
+
+.app-close-button {
+    background-color: #ff625a;
+    color: #ff625a;
+    font-size: 0.6em;
+}
+
+.app-minimize-button:hover,
+.app-close-button:hover {
+    color: white;
+}
+
+.page {
+    display: none;
+}
+
+.page.show {
+    display: inline-block;
+}
+
+.listing > .listing-item {
+    padding: 15px;
+}
+
+.listing > .listing-item:nth-child(odd) {
+    background-color: white;
+}
+
+.listing > .listing-item:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.workspace {
+    border-bottom: 1px solid #c7c7c7;
+    border-left: 1px solid #c7c7c7;
+    border-right: 1px solid #c7c7c7;
+    overflow-y: scroll;
+    padding: 15px;
+    height: calc(100% - 40px);
+}
+
+.draggable {
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+#loader-page {
+    height: 100%;
+}
+
+#loader-page {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+#job-logs {
+    background-color: white;
+    border: 1px solid #bfbfbf;
+    display: inline-block;
+    overflow-y: scroll;
+    height: calc(438px);
+    width: 100%;
+}
