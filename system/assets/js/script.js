@@ -2,6 +2,7 @@ var siteUrl = null;
 var csrfToken = null;
 var comPort = null;
 var currentComPort = null;
+var currentTestPort = null;
 var arePortsLoaded = false;
 var jobs = [];
 var mode = 'SMS';
@@ -260,6 +261,57 @@ $(document).ready(function() {
             startRun();
         } else {
             stopRun();
+        }
+    });
+
+    $('body').on('click', '#set-button', function() {
+        if($(this).text() === 'Connect') {
+            if($('#test-com-port-field option:selected').val() !== '') {
+                $(this).text('Disconnect');
+                $('#testing-logs .listing').html('');
+
+                currentTestPort = new SerialPort($('#test-com-port-field option:selected').val(), {
+                    baudRate: 115200,
+                    parity: 'none',
+                    dataBits: 8,
+                    stopBits: 1,
+                    parser: SerialPort.parsers.readline('\r\n')
+                }, function(err) {
+                    if(err) {
+                        $('#testing-logs .listing').append('Unable to established connection with the selected COM port.<br>');
+                        $('#command-fieldset').attr('disabled', true);
+                    } else {
+                        $('#testing-logs .listing').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
+                        $('#command-fieldset').attr('disabled', false);
+                    }
+                });
+            } else {
+                $('#test-com-port-field option:selected').focus();
+            }
+        } else {
+            $(this).text('Connect');
+
+            currentTestPort.close(function(err) {});
+
+            currentTestPort = null;
+        }
+    });
+
+    $('body').on('click', '#send-button', function() {
+        if($('#command-field').val() !== '') {
+            var additionalData = "";
+
+            if($('#crlf-checkbox').is(':checked')) {
+                additionalData = "\r\n";
+            }
+
+            sendCommand($('#command-field').val() + additionalData);
+            $('#testing-logs .listing').append('<strong>' + $('#command-field').val() + '</strong><br>');
+            currentTestPort.once('data', function(buffer) {
+                $('#testing-logs .listing').append(buffer.toString() + '<br>');
+            });
+        } else {
+            $('#command-field').focus();
         }
     });
 });
