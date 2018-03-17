@@ -52,7 +52,7 @@ body {
 
 .titlebar > .labels {
     color: white;
-    width: calc(100% - 70px);
+    width: calc(100% - 90px);
 }
 
 .titlebar > .labels > .logo {
@@ -70,9 +70,10 @@ body {
 
 .titlebar > .buttons {
     text-align: right;
-    width: 70px;
+    width: 90px;
 }
 
+.app-switch-button,
 .app-minimize-button,
 .app-close-button {
     border: none;
@@ -87,6 +88,13 @@ body {
     -webkit-app-region: no-drag;
 }
 
+.app-switch-button {
+    background-color: #2ad043;
+    color: #2ad043;
+    display: none;
+    font-size: 0.6em;
+}
+
 .app-minimize-button {
     background-color: #ffc12e;
     color: #ffc12e;
@@ -99,6 +107,7 @@ body {
     font-size: 0.6em;
 }
 
+.app-switch-button:hover,
 .app-minimize-button:hover,
 .app-close-button:hover {
     color: white;
@@ -165,6 +174,16 @@ body {
     border: 1px solid #bfbfbf;
     display: inline-block;
     overflow-y: scroll;
-    height: calc(438px);
+    height: 438px;
+    width: 100%;
+}
+
+#testing-logs {
+    background-color: white;
+    border: 1px solid #bfbfbf;
+    display: inline-block;
+    overflow-y: scroll;
+    margin-bottom: 15px;
+    height: 378px;
     width: 100%;
 }

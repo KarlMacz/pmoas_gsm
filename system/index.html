@@ -18,6 +18,9 @@
             <div class="title">Essential Ingredients Specialist Provider Inc. SMS Sender</div>
         </div>
         <div class="buttons">
+            <div class="app-switch-button">
+                <span class="fa fa-refresh"></span>
+            </div>
             <div class="app-minimize-button">
                 <span class="fa fa-window-minimize"></span>
             </div>
@@ -53,8 +56,6 @@
                             <label for="com-port-field">COM Port:</label>
                             <select id="com-port-field" class="form-control">
                                 <option value="" selected disabled>Select an option...</option>
-                                <option value="">Test</option>
-                                <option value="Test">Test</option>
                             </select>
                         </div>
                     </fieldset>
@@ -67,6 +68,33 @@
             </div>
             <div id="job-logs">
                 <div class="listing"></div>
+            </div>
+        </div>
+        <div id="testing-page" class="page">
+            <div class="form-group">
+                <label for="test-com-port-field">COM Port:</label>
+                <div class="input-group">
+                    <select id="test-com-port-field" class="form-control">
+                        <option value="" selected disabled>Select an option...</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" id="set-button" class="btn btn-primary">Set</button>
+                    </span>
+                </div>
+            </div>
+            <div id="testing-logs">
+                <div class="listing"></div>
+            </div>
+            <div class="form-group no-margin">
+                <div class="input-group">
+                    <input type="text" id="command-field" class="form-control">
+                    <label class="input-group-addon">
+                        <input type="checkbox" id="crlf-checker"> +CR
+                    </label>
+                    <span class="input-group-btn">
+                        <button type="button" id="send-button" class="btn btn-primary">Send</button>
+                    </span>
+                </div>
             </div>
         </div>
     </div>

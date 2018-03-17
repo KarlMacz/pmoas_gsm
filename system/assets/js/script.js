@@ -4,6 +4,7 @@ var comPort = null;
 var currentComPort = null;
 var arePortsLoaded = false;
 var jobs = [];
+var mode = 'SMS';
 
 function closePage(id) {
     $('#' + id + '.page').fadeOut(250);
@@ -26,13 +27,11 @@ function sendCommand(command, callback) {
 }
 
 function loadSerialPorts() {
-    closePage('main-page');
-    openPage('loader-page');
-
     SerialPort.list(function (err, ports) {
         if(ports.length > 0) {
             ports.forEach(function(port) {
                 $('#com-port-field').append('<option value="' + port.comName + '">' + port.comName + ' - ' + port.manufacturer + '</option>');
+                $('#test-com-port-field').append('<option value="' + port.comName + '">' + port.comName + ' - ' + port.manufacturer + '</option>');
 
                 console.log(port.pnpId);
                 console.log(port.manufacturer);
@@ -46,13 +45,23 @@ function loadSerialPorts() {
 
     $('#url-field').append('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
     $('#url-field').append('<option value="' + settings.secondary_url + '">' + settings.secondary_url + '</option>');
+}
+
+function loadMainPage() {
+    closePage('main-page');
+    openPage('loader-page');
+
+    loadSerialPorts();
 
     setTimeout(function() {
         closePage('loader-page');
     }, 1000);
-
     setTimeout(function() {
         openPage('main-page');
+
+        $('.app-switch-button').css({
+            'display': 'inline-block'
+        });
     }, 1250);
 }
 
@@ -78,7 +87,8 @@ function startRun() {
                 baudRate: 115200,
                 parity: 'none',
                 dataBits: 8,
-                stopBits: 1
+                stopBits: 1,
+                parser: SerialPort.parsers.readline('\r\n')
             }, function(err) {
                 if(err) {
                     stopRun();
@@ -103,7 +113,7 @@ function startRun() {
                             <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
                         </div>');
 
-                        sendCommand('AT', function() {
+                        /*sendCommand('AT', function() {
                             sendCommand('AT+CREG=1', function() {
                                 for(var ctr = 0; ctr < response2.data.length; ctr++) {
                                     sendCommand('AT+CMGF=1', function() {
@@ -121,7 +131,51 @@ function startRun() {
                                     <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
                                 </div>');
                             });
+                        });*/
+
+                        sendCommand('AT');
+                        currentComPort.once('data', function(buffer) {
+                            if(buffer.toString() === 'OK') {
+                                sendCommand('AT+CREG=1');
+                                currentComPort.once('data', function(buffer) {
+                                    if(buffer.toString() === 'OK') {
+                                        sendCommand('AT+CMGF=1');
+                                        currentComPort.once('data', function(buffer) {
+                                            if(buffer.toString() === 'OK') {
+                                                sendCommand('AT+CMGS="' + response2.data[ctr].contact_number + '"');
+                                                currentComPort.once('data', function(buffer) {
+                                                    if(buffer.toString() === 'OK') {
+                                                        sendCommand(response2.data[ctr].message + String.fromCharCode(26));
+                                                        currentComPort.once('data', function(buffer) {
+                                                            if(buffer.toString() === 'OK') {
+                                                                $.ajax({
+                                                                    url: siteUrl + '/resources/requests/jobs/update_status',
+                                                                    method: 'POST',
+                                                                    data: {
+                                                                        _token: csrfToken,
+                                                                        authorization_key: settings.authorization_key
+                                                                    },
+                                                                    dataType: 'json',
+                                                                    success: function(response) {
+                                                                        $('#job-logs .listing').append('<div class="listing-item">\
+                                                                            <h4 class="no-margin">Sent a message to ' + response2.data[ctr].contact_number + '.</h4>\
+                                                                        </div>');
+                                                                    },
+                                                                    error: function(arg1, arg2, arg3) {
+                                                                        stopRun();
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         });
+
                     }
                 },
                 error: function(arg1, arg2, arg3) {
@@ -151,7 +205,7 @@ function stopRun() {
 }
 
 $(document).ready(function() {
-    loadSerialPorts();
+    loadMainPage();
 
     $('.app-close-button').click(function() {
         remote.getCurrentWindow().close();
@@ -159,6 +213,30 @@ $(document).ready(function() {
 
     $('.app-minimize-button').click(function() {
         remote.getCurrentWindow().minimize();
+    });
+
+    $('.app-switch-button').click(function() {
+        loadSerialPorts();
+
+        if(mode === 'SMS') {
+            mode = 'Test';
+
+            setTimeout(function() {
+                closePage('main-page');
+            }, 250);
+            setTimeout(function() {
+                openPage('testing-page');
+            }, 500);
+        } else {
+            mode = 'SMS';
+
+            setTimeout(function() {
+                closePage('testing-page');
+            }, 250);
+            setTimeout(function() {
+                openPage('main-page');
+            }, 500);
+        }
     });
 
     $('body').on('change', '#url-field', function() {
