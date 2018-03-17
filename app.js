@@ -23,7 +23,7 @@ app.on('ready', function() {
     });
 
     mainWindow.loadURL('file://' + __dirname + '/system/index.html');
-    // mainWindow.openDevTools();
+    mainWindow.openDevTools();
     Menu.setApplicationMenu(null);
 
     mainWindow.on('ready-to-show', function() {
