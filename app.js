@@ -19,7 +19,8 @@ app.on('ready', function() {
         resizable: false,
         frame: false,
         autoHideMenuBar: true,
-        fullscreen: false
+        fullscreen: false,
+        icon: __dirname + '/system/assets/img/logo.png'
     });
 
     mainWindow.loadURL('file://' + __dirname + '/system/index.html');

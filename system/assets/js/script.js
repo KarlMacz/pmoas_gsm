@@ -206,6 +206,10 @@ function stopRun() {
 }
 
 $(document).ready(function() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
     loadMainPage();
 
     $('.app-close-button').click(function() {
@@ -222,6 +226,8 @@ $(document).ready(function() {
         if(mode === 'SMS') {
             mode = 'Test';
 
+            $(this).attr('title', 'Switch to SMS Mode');
+
             setTimeout(function() {
                 closePage('main-page');
             }, 250);
@@ -230,6 +236,8 @@ $(document).ready(function() {
             }, 500);
         } else {
             mode = 'SMS';
+
+            $(this).attr('title', 'Switch to Test Mode');
 
             setTimeout(function() {
                 closePage('testing-page');
