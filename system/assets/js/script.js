@@ -281,7 +281,7 @@ $(document).ready(function() {
         if($(this).text() === 'Connect') {
             if($('#test-com-port-field option:selected').val() !== '') {
                 $(this).text('Disconnect');
-                $('#testing-logs .listing').html('');
+                $('#testing-logs').html('');
 
                 socket.emit('test_gsm_connect', $('#test-com-port-field option:selected').val());
             } else {
@@ -304,7 +304,7 @@ $(document).ready(function() {
 
             socket.emit('test_gsm_command', $('#command-field').val() + additionalData);
 
-            $('#testing-logs .listing').append('<strong>' + $('#command-field').val() + '</strong><br>');
+            $('#testing-logs').append('<strong>' + $('#command-field').val() + '</strong><br>');
         } else {
             $('#command-field').focus();
         }
@@ -312,16 +312,16 @@ $(document).ready(function() {
 
     socket.on('test_gsm_connect_response', function(data) {
         if(data === 'Ok') {
-            $('#testing-logs .listing').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
+            $('#testing-logs').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
             $('#command-fieldset').attr('disabled', false);
         } else {
-            $('#testing-logs .listing').append('Unable to established connection with the selected COM port.<br>');
+            $('#testing-logs').append('Unable to established connection with the selected COM port.<br>');
             $('#command-fieldset').attr('disabled', true);
             $('#set-button').text('Connect');
         }
     });
 
     socket.on('test_gsm_data', function(data) {
-        $('#testing-logs .listing').append(data + '<br>');
+        $('#testing-logs').append(data + '<br>');
     });
 });
