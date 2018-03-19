@@ -281,31 +281,14 @@ $(document).ready(function() {
                 $(this).text('Disconnect');
                 $('#testing-logs .listing').html('');
 
-                currentTestPort = new SerialPort($('#test-com-port-field option:selected').val(), {
-                    baudRate: 115200,
-                    parity: 'none',
-                    dataBits: 8,
-                    stopBits: 1,
-                    parser: SerialPort.parsers.readline('\r\n')
-                }, function(err) {
-                    if(err) {
-                        $('#testing-logs .listing').append('Unable to established connection with the selected COM port.<br>');
-                        $('#command-fieldset').attr('disabled', true);
-                        $('#set-button').text('Connect');
-                    } else {
-                        $('#testing-logs .listing').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
-                        $('#command-fieldset').attr('disabled', false);
-                    }
-                });
+                socket.emit('test_gsm_connect', $('#test-com-port-field option:selected').val());
             } else {
                 $('#test-com-port-field option:selected').focus();
             }
         } else {
             $(this).text('Connect');
 
-            currentTestPort.close(function(err) {});
-
-            currentTestPort = null;
+            socket.emit('gsm_disconnect', true);
         }
     });
 
@@ -317,13 +300,26 @@ $(document).ready(function() {
                 additionalData = "\r\n";
             }
 
-            sendCommand($('#command-field').val() + additionalData);
+            socket.emit('test_gsm_command', $('#command-field').val() + additionalData);
+
             $('#testing-logs .listing').append('<strong>' + $('#command-field').val() + '</strong><br>');
-            currentTestPort.once('data', function(buffer) {
-                $('#testing-logs .listing').append(buffer.toString() + '<br>');
-            });
         } else {
             $('#command-field').focus();
         }
+    });
+
+    socket.on('test_gsm_connect_response', function(data) {
+        if(data === 'Ok') {
+            $('#testing-logs .listing').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
+            $('#command-fieldset').attr('disabled', false);
+        } else {
+            $('#testing-logs .listing').append('Unable to established connection with the selected COM port.<br>');
+            $('#command-fieldset').attr('disabled', true);
+            $('#set-button').text('Connect');
+        }
+    });
+
+    socket.on('test_gsm_data', function(data) {
+        $('#testing-logs .listing').append(data + '<br>');
     });
 });
