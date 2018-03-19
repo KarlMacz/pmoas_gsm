@@ -7,4 +7,4 @@ var jQuery = require('jquery');
 var $ = jQuery;
 var bootstrap = require('bootstrap');
 
-var settings = JSON.parse(fs.readFileSync('system/config/settings.json'));
+var settings = JSON.parse(fs.readFileSync(__dirname + '/config/settings.json'));

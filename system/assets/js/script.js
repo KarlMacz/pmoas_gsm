@@ -28,6 +28,9 @@ function sendCommand(command, callback) {
 }
 
 function loadSerialPorts() {
+    $('#com-port-field').html('');
+    $('#test-com-port-field').html('');
+
     SerialPort.list(function (err, ports) {
         if(ports.length > 0) {
             ports.forEach(function(port) {
@@ -44,7 +47,7 @@ function loadSerialPorts() {
         }
     });
 
-    $('#url-field').append('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
+    $('#url-field').html('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
     $('#url-field').append('<option value="' + settings.secondary_url + '">' + settings.secondary_url + '</option>');
 }
 
@@ -288,6 +291,7 @@ $(document).ready(function() {
                     if(err) {
                         $('#testing-logs .listing').append('Unable to established connection with the selected COM port.<br>');
                         $('#command-fieldset').attr('disabled', true);
+                        $('#set-button').text('Connect');
                     } else {
                         $('#testing-logs .listing').append('Connection with ' + $('#test-com-port-field option:selected').val() + ' has been established.<br>');
                         $('#command-fieldset').attr('disabled', false);
