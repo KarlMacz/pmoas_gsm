@@ -17,7 +17,7 @@
   "scripts": {
     "start": "electron .",
     "rebuild": "electron-rebuild",
-    "build": "electron-packager . --ignore=node_modules/electron --icon=system/assets/img/logo.png",
+    "build": "electron-packager . --overwrite --ignore=node_modules/electron --icon=system/assets/img/logo.png",
     "pack": "asar pack pmoas_gsm-win32-x64/resources/app pmoas_gsm-win32-x64/resources/app.asar --unpack-dir={system/config,system/assets/img}"
   },
   "repository": {
