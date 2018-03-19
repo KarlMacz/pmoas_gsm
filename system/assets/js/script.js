@@ -304,8 +304,26 @@ $(document).ready(function() {
 
             socket.emit('test_gsm_command', $('#command-field').val() + additionalData);
 
-            $('#testing-logs').append('<strong>' + $('#command-field').val() + '</strong><br>');
-        } else {
+            $('#testing-logs').append('<strong>:: ' + $('#command-field').val() + '</strong><br>');
+        }
+
+        $('#command-field').focus();
+    });
+
+    $('body').on('keyup', '#command-field', function(e) {
+        if(e.keyCode === 13) {
+            if($('#command-field').val() !== '') {
+                var additionalData = "";
+
+                if($('#crlf-checkbox').is(':checked')) {
+                    additionalData = "\r\n";
+                }
+
+                socket.emit('test_gsm_command', $('#command-field').val() + additionalData);
+
+                $('#testing-logs').append('<strong>:: ' + $('#command-field').val() + '</strong><br>');
+            }
+
             $('#command-field').focus();
         }
     });

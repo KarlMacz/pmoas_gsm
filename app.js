@@ -64,11 +64,15 @@ app.on('ready', function() {
         });
 
         socket.on('gsm_disconnect', function(data) {
-            gsmModule.close(function(err) {});
+            gsmModule.close(function(err) {
+                gsmModule = null;
+            });
         });
 
         socket.on('disconnect', function() {
-            gsmModule.close(function(err) {});
+            gsmModule.close(function(err) {
+                gsmModule = null;
+            });
         });
     });
 
