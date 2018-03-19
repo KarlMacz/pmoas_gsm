@@ -47,8 +47,10 @@ function loadSerialPorts() {
         }
     });
 
-    $('#url-field').html('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
-    $('#url-field').append('<option value="' + settings.secondary_url + '">' + settings.secondary_url + '</option>');
+    // $('#url-field').html('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
+    // $('#url-field').append('<option value="' + settings.secondary_url + '">' + settings.secondary_url + '</option>');
+    $('#url-field').html('<option value="http://eingredientsspecialist.com">http://eingredientsspecialist.com</option>');
+    $('#url-field').append('<option value="http://localhost:8080">http://localhost:8080</option>');
 }
 
 function loadMainPage() {
