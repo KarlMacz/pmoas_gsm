@@ -91,7 +91,9 @@ function startRun() {
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
-                smsInterval = setInterval(sendSms(), 60000);
+                smsInterval = setInterval(function() {
+                    sendSms()
+                }, 60000);
             }
         },
         error: function(arg1, arg2, arg3) {
@@ -101,7 +103,6 @@ function startRun() {
 }
 
 function sendSms() {
-    console.log('...');
     $.ajax({
         url: siteUrl + '/resources/requests/jobs',
         headers: {
