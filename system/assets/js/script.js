@@ -115,14 +115,16 @@ function sendSms() {
         success: function(response) {
             if(response.status === 'Success') {
                 if(response.data.length > 0) {
-                    socket.emit('gsm_command', {
-                        'contact_number': response.data[i].contact_number,
-                        'message': response.data[i].message
-                    });
-
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
                     </div>');
+                    
+                    for(var i = 0; i < response.data.length; i++) {
+                        socket.emit('gsm_command', {
+                            'contact_number': response.data[i].contact_number,
+                            'message': response.data[i].message
+                        });
+                    }
                 } else {
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">No pending jobs at the moment.</h4>\
