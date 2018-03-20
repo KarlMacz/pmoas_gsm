@@ -101,6 +101,7 @@ function startRun() {
 }
 
 function sendSms() {
+    console.log('...');
     $.ajax({
         url: siteUrl + '/resources/requests/jobs',
         headers: {
