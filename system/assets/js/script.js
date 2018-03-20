@@ -157,6 +157,7 @@ $(document).ready(function() {
             mode = 'Test';
 
             $(this).attr('title', 'Switch to SMS Mode');
+            $('[data-toggle="tooltip"]').tooltip();
 
             setTimeout(function() {
                 closePage('main-page');
@@ -168,6 +169,7 @@ $(document).ready(function() {
             mode = 'SMS';
 
             $(this).attr('title', 'Switch to Test Mode');
+            $('[data-toggle="tooltip"]').tooltip();
 
             setTimeout(function() {
                 closePage('testing-page');
