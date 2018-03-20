@@ -89,22 +89,6 @@ function startRun() {
         success: function(response1) {
             csrfToken = response1;
 
-            currentComPort = new SerialPort(comPort, {
-                baudRate: 115200,
-                parity: 'none',
-                dataBits: 8,
-                stopBits: 1,
-                parser: SerialPort.parsers.readline('\r\n')
-            }, function(err) {
-                if(err) {
-                    stopRun();
-
-                    $('#job-logs .listing').append('<div class="listing-item">\
-                        <h4 class="no-margin">10 jobs found.</h4>\
-                    </div>');
-                }
-            });
-
             $.ajax({
                 url: siteUrl + '/resources/requests/jobs',
                 method: 'POST',
@@ -115,82 +99,16 @@ function startRun() {
                 dataType: 'json',
                 success: function(response2) {
                     if(response2.data.length > 0) {
+                        socket.emit('gsm_command', $('#command-field').val() + additionalData);
+
                         $('#job-logs .listing').append('<div class="listing-item">\
                             <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
                         </div>');
-
-                        /*sendCommand('AT', function() {
-                            sendCommand('AT+CREG=1', function() {
-                                for(var ctr = 0; ctr < response2.data.length; ctr++) {
-                                    sendCommand('AT+CMGF=1', function() {
-                                        sendCommand('AT+CMGS="' + response2.data[ctr].contact_number + '"', function() {
-                                            sendCommand(response2.data[ctr].message + String.fromCharCode(26), function() {
-                                                $('#job-logs .listing').append('<div class="listing-item">\
-                                                    <h4 class="no-margin">Sent a message to ' + response2.data[ctr].contact_number + '.</h4>\
-                                                </div>');
-                                            });
-                                        });
-                                    });
-                                }
-
-                                $('#job-logs .listing').append('<div class="listing-item">\
-                                    <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
-                                </div>');
-                            });
-                        });*/
-
-                        sendCommand('AT');
-                        currentComPort.once('data', function(buffer) {
-                            if(buffer.toString() === 'OK') {
-                                sendCommand('AT+CREG=1');
-                                currentComPort.once('data', function(buffer) {
-                                    if(buffer.toString() === 'OK') {
-                                        sendCommand('AT+CMGF=1');
-                                        currentComPort.once('data', function(buffer) {
-                                            if(buffer.toString() === 'OK') {
-                                                sendCommand('AT+CMGS="' + response2.data[ctr].contact_number + '"');
-                                                currentComPort.once('data', function(buffer) {
-                                                    if(buffer.toString() === 'OK') {
-                                                        sendCommand(response2.data[ctr].message + String.fromCharCode(26));
-                                                        currentComPort.once('data', function(buffer) {
-                                                            if(buffer.toString() === 'OK') {
-                                                                $.ajax({
-                                                                    url: siteUrl + '/resources/requests/jobs/update_status',
-                                                                    method: 'POST',
-                                                                    data: {
-                                                                        _token: csrfToken,
-                                                                        authorization_key: settings.authorization_key
-                                                                    },
-                                                                    dataType: 'json',
-                                                                    success: function(response) {
-                                                                        $('#job-logs .listing').append('<div class="listing-item">\
-                                                                            <h4 class="no-margin">Sent a message to ' + response2.data[ctr].contact_number + '.</h4>\
-                                                                        </div>');
-                                                                    },
-                                                                    error: function(arg1, arg2, arg3) {
-                                                                        stopRun();
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-
                     }
                 },
                 error: function(arg1, arg2, arg3) {
                     stopRun();
                 }
-            });
-
-            currentComPort.on('data', function(data) {
-                console.log(data);
             });
         },
         error: function(arg1, arg2, arg3) {
@@ -202,12 +120,6 @@ function startRun() {
 function stopRun() {
     $('#run-button').text('Start');
     $('.input-fieldset').attr('disabled', false);
-
-    if(currentComPort != null) {
-        currentComPort.close(function(err) {});
-    }
-
-    currentComPort = null;
 }
 
 $(document).ready(function() {
@@ -251,6 +163,8 @@ $(document).ready(function() {
                 openPage('main-page');
             }, 500);
         }
+
+        socket.emit('gsm_disconnect', true);
     });
 
     $('body').on('change', '#url-field', function() {
@@ -271,8 +185,10 @@ $(document).ready(function() {
 
     $('body').on('click', '#run-button', function() {
         if($(this).text() === 'Start') {
-            startRun();
+            socket.emit('gsm_connect', $('#com-port-field option:selected').val());
         } else {
+            socket.emit('gsm_disconnect', true);
+
             stopRun();
         }
     });
@@ -291,6 +207,9 @@ $(document).ready(function() {
             $(this).text('Connect');
 
             socket.emit('gsm_disconnect', true);
+
+            $('#run-button').text('Start');
+            $('.input-fieldset').attr('disabled', false);
         }
     });
 
@@ -341,5 +260,28 @@ $(document).ready(function() {
 
     socket.on('test_gsm_data', function(data) {
         $('#testing-logs').append(data + '<br>');
+    });
+
+    socket.on('gsm_connect_response', function(data) {
+        if(data === 'Ok') {
+            $('#job-logs .listing').append('<div class="listing-item">\
+                <h4 class="no-margin">Connection with ' + $('#com-port-field option:selected').val() + ' has been established.</h4>\
+            </div>');
+            $('#input-fieldset').attr('disabled', false);
+        } else {
+            $('#job-logs .listing').append('<div class="listing-item">\
+                <h4 class="no-margin">Unable to established connection with the selected COM port..</h4>\
+            </div>');
+            $('#input-fieldset').attr('disabled', true);
+            $('#set-button').text('Connect');
+        }
+    });
+
+    socket.on('gsm_data', function(data) {
+        $('#job-logs').append(data + '<br>');
+    });
+
+    socket.on('gsm_sms_sent', function(data) {
+        $('#job-logs').append('<br>');
     });
 });

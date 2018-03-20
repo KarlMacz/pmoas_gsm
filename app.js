@@ -63,6 +63,41 @@ app.on('ready', function() {
             gsmModule.write(data);
         });
 
+        socket.on('gsm_connect', function(data) {
+            if(gsmModule == null) {
+                gsmModule = new SerialPort(data, {
+                    baudRate: 115200,
+                    parity: 'none',
+                    dataBits: 8,
+                    stopBits: 1
+                }, function(err) {
+                    if(err) {
+                        io.emit('gsm_connect_response', 'Error');
+                    } else {
+                        io.emit('gsm_connect_response', 'Ok');
+                    }
+                });
+
+                gsmModule.on('data', function(data) {
+                    io.emit('gsm_data', data);
+                });
+            }
+        });
+
+        socket.on('gsm_command', function(data) {
+            gsmModule.write('AT\r\n', function() {
+                gsmModule.write('AT+CREG=1\r\n', function() {
+                    gsmModule.write('AT+CMGF=1\r\n', function() {
+                        gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', function() {
+                            gsmModule.write(data.message + String.fromCharCode(26) + '\r\n', function() {
+                                io.emit('gsm_sms_sent', true);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
         socket.on('gsm_disconnect', function(data) {
             gsmModule.close(function(err) {
                 gsmModule = null;
