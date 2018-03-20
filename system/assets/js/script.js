@@ -120,6 +120,8 @@ function startRun() {
 function stopRun() {
     $('#run-button').text('Start');
     $('.input-fieldset').attr('disabled', false);
+
+    socket.emit('gsm_disconnect', true);
 }
 
 $(document).ready(function() {
@@ -187,8 +189,6 @@ $(document).ready(function() {
         if($(this).text() === 'Start') {
             socket.emit('gsm_connect', $('#com-port-field option:selected').val());
         } else {
-            socket.emit('gsm_disconnect', true);
-
             stopRun();
         }
     });
