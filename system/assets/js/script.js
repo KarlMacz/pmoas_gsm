@@ -4,6 +4,7 @@ var comPort = null;
 var arePortsLoaded = false;
 var jobs = [];
 var mode = 'SMS';
+var smsInterval = null;
 
 function closePage(id) {
     $('#' + id + '.page').fadeOut(250);
@@ -88,7 +89,7 @@ function startRun() {
         success: function(response1) {
             csrfToken = response1;
 
-            setInterval(sendSms(), 60000 * 5);
+            smsInterval = setInterval(sendSms(), 60000 * 5);
         },
         error: function(arg1, arg2, arg3) {
             stopRun();
@@ -107,7 +108,10 @@ function sendSms() {
         dataType: 'json',
         success: function(response2) {
             if(response2.data.length > 0) {
-                socket.emit('gsm_command', $('#command-field').val() + additionalData);
+                socket.emit('gsm_command', {
+                    'contact_number': response2.data[i].contact_number,
+                    'message': response2.data[i].message
+                });
 
                 $('#job-logs .listing').append('<div class="listing-item">\
                     <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
@@ -115,6 +119,8 @@ function sendSms() {
             }
         },
         error: function(arg1, arg2, arg3) {
+            console.log(arg1.responseText);
+
             stopRun();
         }
     });
@@ -128,7 +134,7 @@ function stopRun() {
 }
 
 $(document).ready(function() {
-    $(function () {
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 

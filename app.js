@@ -85,6 +85,7 @@ app.on('ready', function() {
         });
 
         socket.on('gsm_command', function(data) {
+            data = JSON.parse(data);
             // gsmModule.write('AT\r\n', function() {
                 // gsmModule.write('AT+CREG=1\r\n', function() {
                     // gsmModule.write('AT+CMGF=1\r\n', function() {
