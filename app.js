@@ -28,6 +28,7 @@ app.on('ready', function() {
         icon: __dirname + '/system/assets/img/logo.png'
     });
     var gsmModule = null;
+    var gsmModuleError null;
 
     mainWindow.loadURL('file://' + __dirname + '/system/index.html');
     mainWindow.openDevTools();
@@ -86,6 +87,10 @@ app.on('ready', function() {
                     io.emit('gsm_connect_response', 'Ok');
                 }
             });
+
+            gsmModule.on('error', function() {
+                gsmModuleError = true;
+            });
         });
 
         socket.on('gsm_command', function(data) {
@@ -98,26 +103,42 @@ app.on('ready', function() {
             }, 250);
 
             setTimeout(function() {
-                gsmModule.write('AT+CMGF=1\r\n');
+                if(gsmModuleError == null && gsmModuleError != true) {
+                    gsmModule.write('AT+CMGF=1\r\n');
+                }
             }, 500);
 
             setTimeout(function() {
-                gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
+                if(gsmModuleError == null && gsmModuleError != true) {
+                    gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
+                }
             }, 750);
 
             setTimeout(function() {
-                gsmModule.write(data.message);
+                if(gsmModuleError == null && gsmModuleError != true) {
+                    gsmModule.write(data.message);
+                }
             }, 1000);
 
             setTimeout(function() {
-                gsmModule.write(Buffer([0x1A]));
+                if(gsmModuleError == null && gsmModuleError != true) {
+                    gsmModule.write(Buffer([0x1A]));
+                }
             }, 1250);
 
             setTimeout(function() {
-                gsmModule.write('\r\n');
+                if(gsmModuleError == null && gsmModuleError != true) {
+                    gsmModule.write('\r\n');
+                }
             }, 1500);
 
-            io.emit('gsm_sms_sent', true);
+            if(gsmModuleError) {
+                io.emit('gsm_sms_sent', true);io.emit('gsm_sms_sent', false);
+            } else {
+                gsmModuleError = null;
+
+                io.emit('gsm_sms_sent', true);
+            }
         });
 
         socket.on('gsm_disconnect', function(data) {

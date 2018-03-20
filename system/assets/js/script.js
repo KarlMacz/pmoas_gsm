@@ -101,7 +101,6 @@ function startRun() {
 }
 
 function sendSms() {
-    console.log('sendSms');
     $.ajax({
         url: siteUrl + '/resources/requests/jobs',
         headers: {
@@ -113,7 +112,6 @@ function sendSms() {
         },
         dataType: 'json',
         success: function(response) {
-            console.log(response);
             if(response.status === 'Success') {
                 if(response.data.length > 0) {
                     $('#job-logs .listing').append('<div class="listing-item">\
@@ -141,6 +139,19 @@ function sendSms() {
             console.log(arg1.responseText);
 
             stopRun();
+        }
+    });
+}
+
+function updateJobStatus() {
+    $.ajax({
+        url: siteUrl + '/resources/requests/jobs/update_status',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        method: 'POST',
+        data: {
+            authorization_key: settings.authorization_key
         }
     });
 }
@@ -326,6 +337,8 @@ $(document).ready(function() {
             $('#job-logs .listing').append('<div class="listing-item">\
                     <h4 class="no-margin">Message sent.</h4>\
                 </div>');
+
+            updateJobStatus();
         } else {
             $('#job-logs .listing').append('<div class="listing-item">\
                     <h4 class="no-margin">Message sending failed.</h4>\
