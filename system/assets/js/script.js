@@ -110,10 +110,9 @@ function sendSms() {
         },
         dataType: 'json',
         success: function(response) {
+            console.log(response);
             if(response.status === 'Success') {
-                console.log('sendSms Success');
                 if(response.data.length > 0) {
-                    console.log('sendSms > 0');
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
                     </div>');
