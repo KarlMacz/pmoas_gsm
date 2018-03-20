@@ -1,8 +1,6 @@
 var siteUrl = null;
 var csrfToken = null;
 var comPort = null;
-var currentComPort = null;
-var currentTestPort = null;
 var arePortsLoaded = false;
 var jobs = [];
 var mode = 'SMS';
@@ -77,8 +75,8 @@ function startRun() {
     $('.input-fieldset').attr('disabled', true);
     $('#job-logs .listing').html('');
 
-    siteUrl = $('#url-field').val();
-    comPort = $('#com-port-field').val();
+    siteUrl = $('#url-field option:selected').val();
+    comPort = $('#com-port-field option:selected').val();
 
     $.ajax({
         url: siteUrl + '/resources/requests/authorization',
