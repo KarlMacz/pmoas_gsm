@@ -120,7 +120,10 @@ app.on('ready', function() {
                             gsmModule.once('data', function() {
                                 gsmModule.write(Buffer([0x1A]));
                                 gsmModule.once('data', function() {
-                                    io.emit('gsm_sms_sent', true);
+                                    gsmModule.write('\r\n');
+                                    gsmModule.once('data', function() {
+                                        io.emit('gsm_sms_sent', true);
+                                    });
                                 });
                             });
                         });
