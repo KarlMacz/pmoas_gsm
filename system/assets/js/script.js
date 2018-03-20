@@ -87,7 +87,7 @@ function startRun() {
         },
         dataType: 'json',
         success: function(response1) {
-            csrfToken = response1;
+            csrfToken = response1.token;
 
             smsInterval = setInterval(sendSms(), 60000 * 5);
         },
