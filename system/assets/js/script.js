@@ -90,27 +90,31 @@ function startRun() {
         success: function(response1) {
             csrfToken = response1;
 
-            $.ajax({
-                url: siteUrl + '/resources/requests/jobs',
-                method: 'POST',
-                data: {
-                    _token: csrfToken,
-                    authorization_key: settings.authorization_key
-                },
-                dataType: 'json',
-                success: function(response2) {
-                    if(response2.data.length > 0) {
-                        socket.emit('gsm_command', $('#command-field').val() + additionalData);
+            setInterval(sendSms(), 60000 * 5);
+        },
+        error: function(arg1, arg2, arg3) {
+            stopRun();
+        }
+    });
+}
 
-                        $('#job-logs .listing').append('<div class="listing-item">\
-                            <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
-                        </div>');
-                    }
-                },
-                error: function(arg1, arg2, arg3) {
-                    stopRun();
-                }
-            });
+function sendSms() {
+    $.ajax({
+        url: siteUrl + '/resources/requests/jobs',
+        method: 'POST',
+        data: {
+            _token: csrfToken,
+            authorization_key: settings.authorization_key
+        },
+        dataType: 'json',
+        success: function(response2) {
+            if(response2.data.length > 0) {
+                socket.emit('gsm_command', $('#command-field').val() + additionalData);
+
+                $('#job-logs .listing').append('<div class="listing-item">\
+                    <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
+                </div>');
+            }
         },
         error: function(arg1, arg2, arg3) {
             stopRun();
