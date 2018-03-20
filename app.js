@@ -100,39 +100,39 @@ app.on('ready', function() {
 
             setTimeout(function() {
                 gsmModule.write('AT+CREG=1\r\n');
-            }, 500);
+            }, 250);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('AT+CMGF=1\r\n');
                 }
-            }, 1000);
+            }, 500);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
                 }
-            }, 1500);
+            }, 750);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write(data.message);
                 }
-            }, 2000);
+            }, 1000);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write(Buffer([0x1A]));
                 }
-            }, 2500);
+            }, 1250);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('\r\n');
                 }
-            }, 3000);
+            }, 1500);
 
-            if(gsmModuleError) {
+            if(gsmModuleError === true) {
                 gsmModuleError = null;
 
                 io.emit('gsm_sms_sent', {
