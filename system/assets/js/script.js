@@ -91,11 +91,10 @@ function startRun() {
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
-                sendSms()
+                sendSms();
 
                 smsInterval = setInterval(function() {
                     sendSms();
-                    console.log('...');
                 }, 2000);
             }
         },
@@ -120,7 +119,7 @@ function sendSms() {
             if(response.status === 'Success') {
                 if(response.data.length === 1) {
                     $('#job-logs .listing').append('<div class="listing-item">\
-                        <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
+                        <h4 class="no-margin">1 job(s) retrieved.</h4>\
                     </div>');
 
                     socket.emit('gsm_command', {
@@ -135,7 +134,7 @@ function sendSms() {
                 }
             } else {
                 $('#job-logs .listing').append('<div class="listing-item">\
-                    <h4 class="no-margin">' + response.message + ' job(s) retrieved.</h4>\
+                    <h4 class="no-margin">' + response.message + '</h4>\
                 </div>');
             }
         },
