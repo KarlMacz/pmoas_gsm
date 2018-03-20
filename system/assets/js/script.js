@@ -35,9 +35,6 @@ function loadSerialPorts() {
             ports.forEach(function(port) {
                 $('#com-port-field').append('<option value="' + port.comName + '">' + port.comName + ' - ' + port.manufacturer + '</option>');
                 $('#test-com-port-field').append('<option value="' + port.comName + '">' + port.comName + ' - ' + port.manufacturer + '</option>');
-
-                console.log(port.pnpId);
-                console.log(port.manufacturer);
             });
 
             arePortsLoaded = true;
@@ -114,11 +111,13 @@ function sendSms() {
         dataType: 'json',
         success: function(response) {
             if(response.status === 'Success') {
+                console.log('sendSms Success');
                 if(response.data.length > 0) {
+                    console.log('sendSms > 0');
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
                     </div>');
-                    
+
                     for(var i = 0; i < response.data.length; i++) {
                         socket.emit('gsm_command', {
                             'contact_number': response.data[i].contact_number,
