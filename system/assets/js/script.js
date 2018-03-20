@@ -251,9 +251,9 @@ $(document).ready(function() {
                 socket.emit('test_gsm_command', $('#command-field').val() + additionalData);
 
                 $('#testing-logs').append('<strong>:: ' + $('#command-field').val() + '</strong><br>');
+                $('#command-field').val('');
             }
 
-            $('#command-field').val('');
             $('#command-field').focus();
         }
     });
