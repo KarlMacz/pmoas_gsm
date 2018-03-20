@@ -273,12 +273,16 @@ $(document).ready(function() {
                 <h4 class="no-margin">Connection with ' + $('#com-port-field option:selected').val() + ' has been established.</h4>\
             </div>');
             $('#input-fieldset').attr('disabled', false);
+
+            startRun();
         } else {
             $('#job-logs .listing').append('<div class="listing-item">\
                 <h4 class="no-margin">Unable to established connection with the selected COM port..</h4>\
             </div>');
             $('#input-fieldset').attr('disabled', true);
             $('#set-button').text('Connect');
+
+            stopRun();
         }
     });
 
