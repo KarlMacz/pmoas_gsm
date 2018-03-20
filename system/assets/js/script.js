@@ -91,8 +91,6 @@ function startRun() {
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
-                sendSms();
-
                 smsInterval = setInterval(sendSms(), 60000 * 5);
             }
         },
