@@ -84,6 +84,10 @@ function startRun() {
         },
         dataType: 'json',
         success: function(response) {
+            $('#job-logs .listing').append('<div class="listing-item">\
+                    <h4 class="no-margin">' ++ response.message  '</h4>\
+                </div>');
+            
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
