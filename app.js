@@ -94,21 +94,21 @@ app.on('ready', function() {
 
         socket.on('gsm_command', function(data) {
             console.log(data);
-            gsmModule.write('AT\r\n', 'utf8', function() {
-                gsmModule.write('AT+CREG=1\r\n', 'utf8', function() {
-                    gsmModule.write('AT+CMGF=1\r\n', 'utf8', function() {
-                        gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', 'utf8', function() {
-                            gsmModule.write(data.message, 'utf8', function() {
-                                gsmModule.write(Buffer([0x1A]), 'utf8', function() {
-                                    gsmModule.write('\r\n', 'utf8', function() {
-                                        io.emit('gsm_sms_sent', true);
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
+            // gsmModule.write('AT\r\n', 'utf8', function() {
+            //     gsmModule.write('AT+CREG=1\r\n', 'utf8', function() {
+            //         gsmModule.write('AT+CMGF=1\r\n', 'utf8', function() {
+            //             gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', 'utf8', function() {
+            //                 gsmModule.write(data.message, 'utf8', function() {
+            //                     gsmModule.write(Buffer([0x1A]), 'utf8', function() {
+            //                         gsmModule.write('\r\n', 'utf8', function() {
+            //                             io.emit('gsm_sms_sent', true);
+            //                         });
+            //                     });
+            //                 });
+            //             });
+            //         });
+            //     });
+            // });
 
             // gsmModule.write('AT\r\n');
             // gsmModule.once('data', function() {
@@ -132,6 +132,33 @@ app.on('ready', function() {
             //         });
             //     });
             // });
+
+            gsmModule.write('AT\r\n');
+
+            setTimeout(function() {
+                gsmModule.write('AT+CREG=1\r\n');
+            }, 250);
+
+            setTimeout(function() {
+                gsmModule.write('AT+CMGF=1\r\n');
+            }, 500);
+
+            setTimeout(function() {
+                gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
+            }, 750);
+
+            setTimeout(function() {
+                gsmModule.write(data.message);
+            }, 1000);
+
+            setTimeout(function() {
+                gsmModule.write(Buffer([0x1A]));
+            }, 1250);
+
+            setTimeout(function() {
+                gsmModule.write('\r\n');
+            }, 1500);
+
         });
 
         socket.on('gsm_disconnect', function(data) {
