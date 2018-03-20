@@ -152,7 +152,8 @@ function updateJobStatus(id) {
         },
         method: 'POST',
         data: {
-            authorization_key: settings.authorization_key
+            authorization_key: settings.authorization_key,
+            id: id
         }
     });
 }
