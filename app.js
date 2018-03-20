@@ -140,10 +140,10 @@ app.on('ready', function() {
                 });
             } else {
                 gsmModuleError = null;
-                
+
                 io.emit('gsm_sms_sent', {
                     'status': 'Success',
-                    'data': data.id
+                    'id': data.id
                 });
             }
         });

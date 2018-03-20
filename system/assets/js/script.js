@@ -339,7 +339,7 @@ $(document).ready(function() {
                     <h4 class="no-margin">Message sent.</h4>\
                 </div>');
 
-            updateJobStatus();
+            updateJobStatus(data.id);
         } else {
             $('#job-logs .listing').append('<div class="listing-item">\
                     <h4 class="no-margin">Message sending failed.</h4>\
