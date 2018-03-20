@@ -95,7 +95,7 @@ function startRun() {
 
                 smsInterval = setInterval(function() {
                     sendSms();
-                }, 2000);
+                }, 5000);
             }
         },
         error: function(arg1, arg2, arg3) {
