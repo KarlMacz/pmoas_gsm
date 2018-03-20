@@ -102,9 +102,11 @@ function startRun() {
 function sendSms() {
     $.ajax({
         url: siteUrl + '/resources/requests/jobs',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
         method: 'POST',
         data: {
-            _token: csrfToken,
             authorization_key: settings.authorization_key
         },
         dataType: 'json',
