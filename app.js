@@ -100,37 +100,37 @@ app.on('ready', function() {
 
             setTimeout(function() {
                 gsmModule.write('AT+CREG=1\r\n');
-            }, 250);
+            }, 500);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('AT+CMGF=1\r\n');
                 }
-            }, 500);
+            }, 1000);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
                 }
-            }, 750);
+            }, 1500);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write(data.message);
                 }
-            }, 1000);
+            }, 2000);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write(Buffer([0x1A]));
                 }
-            }, 1250);
+            }, 2500);
 
             setTimeout(function() {
                 if(gsmModuleError == null && gsmModuleError != true) {
                     gsmModule.write('\r\n');
                 }
-            }, 1500);
+            }, 3000);
 
             if(gsmModuleError) {
                 gsmModuleError = null;
