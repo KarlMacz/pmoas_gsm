@@ -96,7 +96,7 @@ app.on('ready', function() {
             console.log(data);
             data = JSON.parse(data);
             console.log(data);
-            // gsmModule.write('AT\r\n', function() {
+            gsmModule.write('AT\r\n', function() {
                 // gsmModule.write('AT+CREG=1\r\n', function() {
                     // gsmModule.write('AT+CMGF=1\r\n', function() {
                         // gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', function() {
@@ -106,7 +106,7 @@ app.on('ready', function() {
                         // });
                     // });
                 // });
-            // });
+            });
         });
 
         socket.on('gsm_disconnect', function(data) {
