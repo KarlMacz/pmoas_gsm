@@ -39,24 +39,28 @@ app.on('ready', function() {
 
     io.on('connection', function(socket) {
         socket.on('test_gsm_connect', function(data) {
-            if(gsmModule == null) {
-                gsmModule = new SerialPort(data, {
-                    baudRate: 115200,
-                    parity: 'none',
-                    dataBits: 8,
-                    stopBits: 1
-                }, function(err) {
-                    if(err) {
-                        io.emit('test_gsm_connect_response', 'Error');
-                    } else {
-                        io.emit('test_gsm_connect_response', 'Ok');
-                    }
-                });
-
-                gsmModule.on('data', function(data) {
-                    io.emit('test_gsm_data', data);
+            if(gsmModule != null) {
+                gsmModule.close(function(err) {
+                    gsmModule = null;
                 });
             }
+
+            gsmModule = new SerialPort(data, {
+                baudRate: 115200,
+                parity: 'none',
+                dataBits: 8,
+                stopBits: 1
+            }, function(err) {
+                if(err) {
+                    io.emit('test_gsm_connect_response', 'Error');
+                } else {
+                    io.emit('test_gsm_connect_response', 'Ok');
+                }
+            });
+
+            gsmModule.on('data', function(data) {
+                io.emit('test_gsm_data', data);
+            });
         });
 
         socket.on('test_gsm_command', function(data) {
@@ -64,24 +68,28 @@ app.on('ready', function() {
         });
 
         socket.on('gsm_connect', function(data) {
-            if(gsmModule == null) {
-                gsmModule = new SerialPort(data, {
-                    baudRate: 115200,
-                    parity: 'none',
-                    dataBits: 8,
-                    stopBits: 1
-                }, function(err) {
-                    if(err) {
-                        io.emit('gsm_connect_response', 'Error');
-                    } else {
-                        io.emit('gsm_connect_response', 'Ok');
-                    }
-                });
-
-                gsmModule.on('data', function(data) {
-                    io.emit('gsm_data', data);
+            if(gsmModule != null) {
+                gsmModule.close(function(err) {
+                    gsmModule = null;
                 });
             }
+            
+            gsmModule = new SerialPort(data, {
+                baudRate: 115200,
+                parity: 'none',
+                dataBits: 8,
+                stopBits: 1
+            }, function(err) {
+                if(err) {
+                    io.emit('gsm_connect_response', 'Error');
+                } else {
+                    io.emit('gsm_connect_response', 'Ok');
+                }
+            });
+
+            gsmModule.on('data', function(data) {
+                io.emit('gsm_data', data);
+            });
         });
 
         socket.on('gsm_command', function(data) {
