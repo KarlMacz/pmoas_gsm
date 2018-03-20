@@ -341,7 +341,7 @@ $(document).ready(function() {
     });
 
     socket.on('gsm_sms_sent', function(data) {
-        if(data) {
+        if(data.status === 'Success') {
             $('#job-logs .listing').prepend('<div class="listing-item">\
                     <h4 class="no-margin">Message sent.</h4>\
                 </div>');
