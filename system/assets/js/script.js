@@ -89,6 +89,8 @@ function startRun() {
         success: function(response1) {
             csrfToken = response1.token;
 
+            sendSms();
+
             smsInterval = setInterval(sendSms(), 60000 * 5);
         },
         error: function(arg1, arg2, arg3) {
