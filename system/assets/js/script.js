@@ -95,7 +95,8 @@ function startRun() {
 
                 smsInterval = setInterval(function() {
                     sendSms();
-                }, 30000);
+                    console.log('...');
+                }, 2000);
             }
         },
         error: function(arg1, arg2, arg3) {
@@ -117,18 +118,16 @@ function sendSms() {
         dataType: 'json',
         success: function(response) {
             if(response.status === 'Success') {
-                if(response.data.length > 0) {
+                if(response.data.length === 1) {
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
                     </div>');
 
-                    for(var i = 0; i < response.data.length; i++) {
-                        socket.emit('gsm_command', {
-                            'id': response.data[i].id,
-                            'contact_number': response.data[i].contact_number,
-                            'message': response.data[i].message
-                        });
-                    }
+                    socket.emit('gsm_command', {
+                        'id': response.data.id,
+                        'contact_number': response.data.contact_number,
+                        'message': response.data.message
+                    });
                 } else {
                     $('#job-logs .listing').append('<div class="listing-item">\
                         <h4 class="no-margin">No pending jobs at the moment.</h4>\
