@@ -28,8 +28,8 @@ function sendCommand(command, callback) {
 }
 
 function loadSerialPorts() {
-    $('#com-port-field').html('');
-    $('#test-com-port-field').html('');
+    $('#com-port-field').html('<option value="" selected disabled>Select an option...</option>');
+    $('#test-com-port-field').html('<option value="" selected disabled>Select an option...</option>');
 
     SerialPort.list(function (err, ports) {
         if(ports.length > 0) {
@@ -47,9 +47,10 @@ function loadSerialPorts() {
         }
     });
 
-    // $('#url-field').html('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
+    $('#url-field').html('<option value="" selected disabled>Select an option...</option>');
+    // $('#url-field').append('<option value="' + settings.primary_url + '">' + settings.primary_url + '</option>');
     // $('#url-field').append('<option value="' + settings.secondary_url + '">' + settings.secondary_url + '</option>');
-    $('#url-field').html('<option value="http://eingredientsspecialist.com">http://eingredientsspecialist.com</option>');
+    $('#url-field').append('<option value="http://eingredientsspecialist.com">http://eingredientsspecialist.com</option>');
     $('#url-field').append('<option value="http://localhost:8080">http://localhost:8080</option>');
 }
 
