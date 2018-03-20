@@ -86,12 +86,14 @@ function startRun() {
             authorization_key: settings.authorization_key
         },
         dataType: 'json',
-        success: function(response1) {
-            csrfToken = response1.token;
+        success: function(response) {
+            if(response.status === 'Success') {
+                csrfToken = response.token;
 
-            sendSms();
+                sendSms();
 
-            smsInterval = setInterval(sendSms(), 60000 * 5);
+                smsInterval = setInterval(sendSms(), 60000 * 5);
+            }
         },
         error: function(arg1, arg2, arg3) {
             stopRun();
@@ -110,15 +112,25 @@ function sendSms() {
             authorization_key: settings.authorization_key
         },
         dataType: 'json',
-        success: function(response2) {
-            if(response2.data.length > 0) {
-                socket.emit('gsm_command', {
-                    'contact_number': response2.data[i].contact_number,
-                    'message': response2.data[i].message
-                });
+        success: function(response) {
+            if(response.status === 'Success') {
+                if(response.data.length > 0) {
+                    socket.emit('gsm_command', {
+                        'contact_number': response.data[i].contact_number,
+                        'message': response.data[i].message
+                    });
 
+                    $('#job-logs .listing').append('<div class="listing-item">\
+                        <h4 class="no-margin">' + response.data.length + ' job(s) retrieved.</h4>\
+                    </div>');
+                } else {
+                    $('#job-logs .listing').append('<div class="listing-item">\
+                        <h4 class="no-margin">No pending jobs at the moment.</h4>\
+                    </div>');
+                }
+            } else {
                 $('#job-logs .listing').append('<div class="listing-item">\
-                    <h4 class="no-margin">' + response2.data.length + ' job(s) retrieved.</h4>\
+                    <h4 class="no-margin">' + response.message + ' job(s) retrieved.</h4>\
                 </div>');
             }
         },
