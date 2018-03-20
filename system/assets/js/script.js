@@ -84,7 +84,7 @@ function startRun() {
         },
         dataType: 'json',
         success: function(response) {
-            $('#job-logs .listing').append('<div class="listing-item">\
+            $('#job-logs .listing').prepend('<div class="listing-item">\
                     <h4 class="no-margin">' + response.message + '</h4>\
                 </div>');
 
@@ -117,23 +117,17 @@ function sendSms() {
         dataType: 'json',
         success: function(response) {
             if(response.status === 'Success') {
-                if(response.data.length === 1) {
-                    $('#job-logs .listing').append('<div class="listing-item">\
+                $('#job-logs .listing').prepend('<div class="listing-item">\
                         <h4 class="no-margin">1 job(s) retrieved.</h4>\
                     </div>');
 
-                    socket.emit('gsm_command', {
-                        'id': response.data.id,
-                        'contact_number': response.data.contact_number,
-                        'message': response.data.message
-                    });
-                } else {
-                    $('#job-logs .listing').append('<div class="listing-item">\
-                        <h4 class="no-margin">No pending jobs at the moment.</h4>\
-                    </div>');
-                }
+                socket.emit('gsm_command', {
+                    'id': response.data.id,
+                    'contact_number': response.data.contact_number,
+                    'message': response.data.message
+                });
             } else {
-                $('#job-logs .listing').append('<div class="listing-item">\
+                $('#job-logs .listing').prepend('<div class="listing-item">\
                     <h4 class="no-margin">' + response.message + '</h4>\
                 </div>');
             }
@@ -323,14 +317,14 @@ $(document).ready(function() {
 
     socket.on('gsm_connect_response', function(data) {
         if(data === 'Ok') {
-            $('#job-logs .listing').append('<div class="listing-item">\
+            $('#job-logs .listing').prepend('<div class="listing-item">\
                 <h4 class="no-margin">Connection with ' + $('#com-port-field option:selected').val() + ' has been established.</h4>\
             </div>');
             $('#input-fieldset').attr('disabled', false);
 
             startRun();
         } else {
-            $('#job-logs .listing').append('<div class="listing-item">\
+            $('#job-logs .listing').prepend('<div class="listing-item">\
                 <h4 class="no-margin">Unable to established connection with the selected COM port..</h4>\
             </div>');
             $('#input-fieldset').attr('disabled', true);
@@ -341,20 +335,20 @@ $(document).ready(function() {
     });
 
     socket.on('gsm_data', function(data) {
-        $('#job-logs .listing').append('<div class="listing-item">\
+        $('#job-logs .listing').prepend('<div class="listing-item">\
                 <h4 class="no-margin">' + data + '</h4>\
             </div>');
     });
 
     socket.on('gsm_sms_sent', function(data) {
         if(data) {
-            $('#job-logs .listing').append('<div class="listing-item">\
+            $('#job-logs .listing').prepend('<div class="listing-item">\
                     <h4 class="no-margin">Message sent.</h4>\
                 </div>');
 
             updateJobStatus(data.id);
         } else {
-            $('#job-logs .listing').append('<div class="listing-item">\
+            $('#job-logs .listing').prepend('<div class="listing-item">\
                     <h4 class="no-margin">Message sending failed.</h4>\
                 </div>');
         }
