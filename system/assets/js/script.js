@@ -91,9 +91,11 @@ function startRun() {
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
+                sendSms()
+
                 smsInterval = setInterval(function() {
-                    sendSms()
-                }, 60000);
+                    sendSms();
+                }, 30000);
             }
         },
         error: function(arg1, arg2, arg3) {
