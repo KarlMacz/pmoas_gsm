@@ -155,7 +155,7 @@ function updateJobStatus(id) {
             authorization_key: settings.authorization_key,
             id: id
         },
-        dataType: 'json'
+        dataType: 'json',
         success: function(response) {
             console.log(response);
         },
