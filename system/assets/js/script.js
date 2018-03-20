@@ -99,6 +99,7 @@ function startRun() {
 }
 
 function sendSms() {
+    console.log('sendSms');
     $.ajax({
         url: siteUrl + '/resources/requests/jobs',
         headers: {
