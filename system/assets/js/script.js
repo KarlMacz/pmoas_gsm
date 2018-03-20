@@ -91,7 +91,7 @@ function startRun() {
             if(response.status === 'Success') {
                 csrfToken = response.token;
 
-                smsInterval = setInterval(sendSms(), 60000 * 5);
+                smsInterval = setInterval(sendSms(), 60000);
             }
         },
         error: function(arg1, arg2, arg3) {
@@ -170,6 +170,9 @@ function stopRun() {
     $('.input-fieldset').attr('disabled', false);
 
     socket.emit('gsm_disconnect', true);
+
+    clearInterval(smsInterval);
+    smsInterval = null;
 }
 
 $(document).ready(function() {
