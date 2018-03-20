@@ -96,17 +96,17 @@ app.on('ready', function() {
             console.log(data);
             data = JSON.parse(data);
             console.log(data);
-            gsmModule.write('AT\r\n', function() {
-                gsmModule.write('AT+CREG=1\r\n', function() {
-                    gsmModule.write('AT+CMGF=1\r\n', function() {
-                        gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', function() {
-                            gsmModule.write(data.message + String.fromCharCode(26) + '\r\n', function() {
+            // gsmModule.write('AT\r\n', function() {
+                // gsmModule.write('AT+CREG=1\r\n', function() {
+                    // gsmModule.write('AT+CMGF=1\r\n', function() {
+                        // gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', function() {
+                            // gsmModule.write(data.message + String.fromCharCode(26) + '\r\n', function() {
                                 io.emit('gsm_sms_sent', true);
-                            });
-                        });
-                    });
-                });
-            });
+                            // });
+                        // });
+                    // });
+                // });
+            // });
         });
 
         socket.on('gsm_disconnect', function(data) {
