@@ -98,7 +98,7 @@ app.on('ready', function() {
                 gsmModule.write('AT+CREG=1\r\n', 'utf8', function() {
                     gsmModule.write('AT+CMGF=1\r\n', 'utf8', function() {
                         gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', 'utf8', function() {
-                            gsmModule.write(data.message + String.fromCharCode(26) + '\r\n', 'utf8', function() {
+                            gsmModule.write(data.message + '\x1A\r\n', 'utf8', function() {
                                 io.emit('gsm_sms_sent', true);
                             });
                         });
