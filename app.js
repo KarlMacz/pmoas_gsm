@@ -28,7 +28,7 @@ app.on('ready', function() {
         icon: __dirname + '/system/assets/img/logo.png'
     });
     var gsmModule = null;
-    var gsmModuleError null;
+    var gsmModuleError = null;
 
     mainWindow.loadURL('file://' + __dirname + '/system/index.html');
     mainWindow.openDevTools();
