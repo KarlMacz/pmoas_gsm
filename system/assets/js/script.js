@@ -316,10 +316,20 @@ $(document).ready(function() {
     });
 
     socket.on('gsm_data', function(data) {
-        $('#job-logs').append(data + '<br>');
+        $('#job-logs .listing').append('<div class="listing-item">\
+                <h4 class="no-margin">' + data + '</h4>\
+            </div>');
     });
 
     socket.on('gsm_sms_sent', function(data) {
-        $('#job-logs').append('<br>');
+        if(data) {
+            $('#job-logs .listing').append('<div class="listing-item">\
+                    <h4 class="no-margin">Message sent.</h4>\
+                </div>');
+        } else {
+            $('#job-logs .listing').append('<div class="listing-item">\
+                    <h4 class="no-margin">Message sending failed.</h4>\
+                </div>');
+        }
     });
 });
