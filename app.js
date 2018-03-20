@@ -94,12 +94,34 @@ app.on('ready', function() {
 
         socket.on('gsm_command', function(data) {
             console.log(data);
-            gsmModule.write('AT\r\n', 'utf8', function() {
-                gsmModule.write('AT+CREG=1\r\n', 'utf8', function() {
-                    gsmModule.write('AT+CMGF=1\r\n', 'utf8', function() {
-                        gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', 'utf8', function() {
-                            gsmModule.write(data.message + '\x1A\r\n', 'utf8', function() {
-                                io.emit('gsm_sms_sent', true);
+            // gsmModule.write('AT\r\n', 'utf8', function() {
+            //     gsmModule.write('AT+CREG=1\r\n', 'utf8', function() {
+            //         gsmModule.write('AT+CMGF=1\r\n', 'utf8', function() {
+            //             gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n', 'utf8', function() {
+            //                 gsmModule.write(data.message, 'utf8', function() {
+            //                     gsmModule.write(Buffer([0x1A]), 'utf8', function() {
+            //                         io.emit('gsm_sms_sent', true);
+            //                     });
+            //                 });
+            //             });
+            //         });
+            //     });
+            // });
+
+            gsmModule.write('AT\r\n');
+            gsmModule.once('data', function() {
+                gsmModule.write('AT+CREG=1\r\n');
+                gsmModule.once('data', function() {
+                    gsmModule.write('AT+CMGF=1\r\n');
+                    gsmModule.once('data', function() {
+                        gsmModule.write('AT+CMGS="' + data.contact_number + '"\r\n');
+                        gsmModule.once('data', function() {
+                            gsmModule.write(data.message);
+                            gsmModule.once('data', function() {
+                                gsmModule.write(Buffer([0x1A]));
+                                gsmModule.once('data', function() {
+                                    io.emit('gsm_sms_sent', true);
+                                });
                             });
                         });
                     });
