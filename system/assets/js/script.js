@@ -120,6 +120,7 @@ function sendSms() {
 
                     for(var i = 0; i < response.data.length; i++) {
                         socket.emit('gsm_command', {
+                            'id': response.data[i].id,
                             'contact_number': response.data[i].contact_number,
                             'message': response.data[i].message
                         });
@@ -143,7 +144,7 @@ function sendSms() {
     });
 }
 
-function updateJobStatus() {
+function updateJobStatus(id) {
     $.ajax({
         url: siteUrl + '/resources/requests/jobs/update_status',
         headers: {

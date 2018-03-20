@@ -133,11 +133,16 @@ app.on('ready', function() {
             }, 1500);
 
             if(gsmModuleError) {
-                io.emit('gsm_sms_sent', true);io.emit('gsm_sms_sent', false);
+                io.emit('gsm_sms_sent', {
+                    status: 'Error'
+                });
             } else {
                 gsmModuleError = null;
 
-                io.emit('gsm_sms_sent', true);
+                io.emit('gsm_sms_sent', {
+                    'status': 'Success',
+                    'data': data.id
+                });
             }
         });
 
