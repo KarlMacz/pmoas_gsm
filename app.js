@@ -79,7 +79,8 @@ app.on('ready', function() {
                 baudRate: 115200,
                 parity: 'none',
                 dataBits: 8,
-                stopBits: 1
+                stopBits: 1,
+                flowControl: false
             }, function(err) {
                 if(err) {
                     io.emit('gsm_connect_response', 'Error');
